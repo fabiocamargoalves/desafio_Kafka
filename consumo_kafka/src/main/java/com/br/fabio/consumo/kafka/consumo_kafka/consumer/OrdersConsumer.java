@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.fabio.consumo.kafka.consumo_kafka.dto.OrdersDTO;
-import com.br.fabio.consumo.kafka.consumo_kafka.form.AtualizaOrdemForm;
-import com.br.fabio.consumo.kafka.consumo_kafka.modelo.Ordem;
+import com.br.fabio.consumo.kafka.consumo_kafka.in.AtualizaOrdemIn;
+import com.br.fabio.consumo.kafka.consumo_kafka.modelo.Orders;
 import com.br.fabio.consumo.kafka.consumo_kafka.repository.OrdemRepository;
 
 @RestController
@@ -37,7 +37,7 @@ public class OrdersConsumer {
 	@Autowired
 	private OrdemRepository ordemRepository;
 	
-	AtualizaOrdemForm ordemForm;
+	AtualizaOrdemIn ordemForm;
 	
 	@Transactional
 	@KafkaListener(topics="${topic.name}", groupId = "${spring.kafka.group-id}", containerFactory = "orderKafkaListenerContainerFactory")
@@ -49,21 +49,22 @@ public class OrdersConsumer {
 		String name = od.getName();
 		
 	
-		List<Ordem> list = ordemRepository.findByName(name);
+		List<Orders> list = ordemRepository.findByName(name);
 		
 		List<OrdersDTO> odt = OrdersDTO.converter(list);
 		
 		for (OrdersDTO ordem : odt) {
-			AtualizaOrdemForm af = new AtualizaOrdemForm();
+			AtualizaOrdemIn af = new AtualizaOrdemIn();
 			af.setName(ordem.getName());
 			af.setTotal(ordem.getTotal());
 			af.setStatus(ordem.getStatus());
+			af.setDescription(ordem.getDescription());
 			atualizar(ordem.getId(),af);
 		}
 	}
 	
-	public void atualizar(Long id,@RequestBody @Validated AtualizaOrdemForm ordemForm ){
-		Optional<Ordem> ordem =  ordemRepository.findById(id);
+	public void atualizar(Long id,@RequestBody @Validated AtualizaOrdemIn ordemForm ){
+		Optional<Orders> ordem =  ordemRepository.findById(id);
 		if (ordem.isPresent()) {
 			ordemForm.atualizar(id, ordemRepository);
 			System.out.println("++++++++++++++++++++++ SUCESSO ++++++++++++++++++++++++");

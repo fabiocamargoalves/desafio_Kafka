@@ -15,12 +15,14 @@ import org.springframework.kafka.core.ProducerFactory;
 
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
-import com.br.fabio.api.kafka.api_kafka.aplication.form.OrdemForm;
+import com.br.fabio.api.kafka.api_kafka.aplication.in.OrderIn;
+
+
 
 
 
 @Configuration
-public class kafkaProdutorConfig {
+public class KafkaProducerConfig {
 	
 	@Value("${spring.kafka.bootstrap-servers}")
 	private String bootstrapAddress;
@@ -34,7 +36,7 @@ public class kafkaProdutorConfig {
 	}
 	
 	@Bean
-	public ProducerFactory<String, OrdemForm> OrderProducerFactory(){
+	public ProducerFactory<String, OrderIn> OrderProducerFactory(){
 		
 		Map<String, Object> configProps = new HashMap<>();
 		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
@@ -45,7 +47,7 @@ public class kafkaProdutorConfig {
 	}
 	
 	@Bean
-	public KafkaTemplate<String, OrdemForm> orderKafkaTemplate(){
+	public KafkaTemplate<String, OrderIn> orderKafkaTemplate(){
 		return new KafkaTemplate<>(OrderProducerFactory());
 	}
 }

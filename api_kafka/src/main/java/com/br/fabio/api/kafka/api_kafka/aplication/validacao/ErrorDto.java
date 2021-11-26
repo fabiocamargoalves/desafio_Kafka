@@ -1,12 +1,12 @@
 package com.br.fabio.api.kafka.api_kafka.aplication.validacao;
 
-public class ErroDto {
+public class ErrorDto {
 	
 	private String campo;
 	private String erro;
 	
 	
-	public ErroDto(String campo, String erro) {
+	public ErrorDto(String campo, String erro) {
 		this.campo = campo;
 		this.erro = erro;
 	}

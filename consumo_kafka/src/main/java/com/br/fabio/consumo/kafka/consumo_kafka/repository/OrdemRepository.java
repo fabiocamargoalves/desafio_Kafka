@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.br.fabio.consumo.kafka.consumo_kafka.modelo.Ordem;
+import com.br.fabio.consumo.kafka.consumo_kafka.modelo.Orders;
 
-public interface OrdemRepository extends JpaRepository<Ordem, Long>{
+public interface OrdemRepository extends JpaRepository<Orders, Long>{
 
-	List<Ordem> findByName(String nameProduto);
+	List<Orders> findByName(String nameProduto);
 
 }
